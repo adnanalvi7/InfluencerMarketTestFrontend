@@ -1,0 +1,123 @@
+<div class="card shadow rounded-lg">
+  <div class="card-body py-2 px-4">
+    <app-search (selectedProfile)="selectedProfile($event)" [debounce]="300" [minLength]="2"></app-search>
+  </div>
+</div>
+
+<ng-container *ngIf="isLoading">
+  <div class="loading-spinner">
+    <div class="fa-3x">
+      <i class="fa-solid fa-sync fa-spin"></i>
+    </div>
+  </div>
+</ng-container>
+
+<div class="profile-wrape">
+  <!--Profile header-->
+  <ng-container *ngIf="profile?.username && !isLoading">
+    <div class="profile">
+      <div class="image">
+        <img
+          crossorigin="same-origin"
+          [src]="
+            'http://localhost:3802/api?url=' +
+            getEncodedUrl(profile?.profile_pic_url_hd || profile?.profile_pic_url )
+          "
+          alt="profile_pic"
+        />
+      </div>
+      <div class="detail">
+        <h3 class="m-0 mb-2">
+          {{ profile?.username }}
+          <span class="verified" *ngIf="profile?.is_verified"
+            ><img src="./../../../assets/images/verified.png" alt=""
+          /></span>
+        </h3>
+        <div class="d-flex my-4">
+          <p class="pe-3 m-0" *ngIf="profile?.media_count>-1">
+            {{ profile?.media_count | followers }} 
+            <span class="text-muted">posts</span>
+            
+          </p>
+          <p *ngIf="profile?.follower_count>-1" class="pe-3 m-0">
+            {{ profile?.follower_count | followers }}
+            <span class="text-muted">followers</span>
+          </p>
+          <p class="pe-3 m-0" *ngIf="profile?.following_count > -1">
+            {{ profile?.following_count | followers }} 
+            <span class="text-muted">following</span>
+          </p>
+        </div>
+        <div class="more_detail">
+          <p class="m-0">{{ profile?.full_name }}</p>
+          <p class="m-0 text-muted">{{ profile?.biography }}</p>
+          <a
+            *ngIf="profile?.external_url"
+            target="_blank"
+            class="text-decoration-none"
+            [href]="profile?.external_url"
+            >{{ extractDomain(profile?.external_url) }}</a
+          >
+          <div class="links" *ngFor="let item of contactList">
+            <a
+              target="_blank"
+              class="text-decoration-none word_wrape"
+              [href]="item?.formatted_value"
+              >{{ extractDomain(item?.formatted_value) }}</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- posts -->
+  <div class="posts">
+    <div class="row m-4">
+      <div
+        class="col-md-4 col-6 col-lg-3 mb-3"
+        *ngFor="let item of posts?.items"
+      >
+        <div
+          class="post-container cursor-pointer"
+          (click)="openpost(item)"
+        >
+          <div class="image">
+            <img
+              crossorigin="same-origin"
+              [src]="
+                'http://localhost:3802/api?url=' +
+                getEncodedUrl(item.display_url)
+              "
+              alt="post image"
+            />
+          </div>
+          <div *ngIf="item?.media_type == 8" class="post_icon">
+            <img src="./../../../assets/images//copy.png" alt="" srcset="" />
+          </div>
+          <div *ngIf="item?.media_type == 2" class="post_icon">
+            <img src="./../../../assets/images//videoicon.png" alt="" srcset="" />
+          </div>
+          <div class="comments d-flex">
+            <p class="pe-4" *ngIf="item?.like_count>-1">
+              {{ item?.like_count | followers }} <i class="fa fas fa-heart"></i>
+            </p>
+            <p *ngIf="item?.comment_count>-1">
+              {{ item?.comment_count | followers }}
+              <i class="fa fa-solid fa-comment"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center pb-4" *ngIf="posts?.more_available">
+      <button
+      class="btn btn-success"
+        (click)="getNextPagePosts(posts?.end_cursor)"
+        [disabled]="isGettinNextPage"
+      >
+        Next Page
+      </button>
+    </div>
+  </div>
+</div>

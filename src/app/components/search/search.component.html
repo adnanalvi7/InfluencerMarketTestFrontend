@@ -1,0 +1,62 @@
+<ng-container>
+  <form>
+    <div class="d-flex align-items-center mt-4">
+      <div class="flex-auto" style="display: contents">
+        <mat-form-field
+          appearance="outline"
+          class="fuse-mat-no-subscript w-100 fuse-mat-rounded"
+        >
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            matInput
+            [formControl]="searchControl"
+            [matAutocomplete]="matAutocomplete"
+            [placeholder]="'Search..'"
+            (keydown)="onKeydown($event)"
+          />
+        </mat-form-field>
+        <mat-autocomplete
+          class="max-h-128 mt-1 rounded"
+          [disableRipple]="true"
+          #matAutocomplete="matAutocomplete"
+        >
+          <mat-option
+            class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+            *ngIf="resultSets && !resultSets.length"
+          >
+            No results found!
+          </mat-option>
+
+          <ng-container *ngFor="let result of resultSets; trackBy: trackByFn">
+            <mat-option
+              class="search_option"
+              [routerLink]="result.link"
+            >
+              <ng-container>
+                <ng-container
+                  *ngTemplateOutlet="
+                    searchResult;
+                    context: { $implicit: result }
+                  "
+                ></ng-container>
+              </ng-container>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </div>
+    </div>
+  </form>
+</ng-container>
+
+<ng-template #searchResult let-result>
+  <div class="search-wraper d-flex mt-2 justify-content-between align-items-center" (click)="selectProfile(result)">
+    <div class="d-flex">
+        <div class="image"><img [src]="result?.picture" alt="user image" /></div>
+        <div class="content px-2 mt-1">
+            <p class="userName m-0 p-0">@{{result?.username}}</p>
+            <p class="name  text-muted">{{result?.fullname}}</p>
+        </div>
+    </div>
+    <div class="followers text-muted">{{result?.followers | followers}}</div>
+  </div>
+</ng-template>
