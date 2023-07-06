@@ -24,7 +24,7 @@
         <img
           crossorigin="same-origin"
           [src]="
-            'http://localhost:3802/api?url=' +
+            proxyUrl+'api?url=' +
             getEncodedUrl(
               profile?.profile_pic_url_hd || profile?.profile_pic_url
             )
@@ -79,15 +79,17 @@
   <!-- posts -->
   <div class="posts">
     <div class="post_container">
-      <div class="wrape" *ngFor="let item of posts?.items" (click)="openpost(item)">
+      <div
+        class="wrape"
+        *ngFor="let item of posts?.items"
+        (click)="openpost(item)"
+      >
         <div class="image">
           <img
-          crossorigin="same-origin"
-          [src]="
-            'http://localhost:3802/api?url=' + getEncodedUrl(item.display_url)
-          "
-          alt="post image"
-        />
+            crossorigin="same-origin"
+            [src]="proxyUrl + 'api?url=' + getEncodedUrl(item.display_url)"
+            alt="post image"
+          />
         </div>
         <div *ngIf="item?.media_type == 8" class="post_icon">
           <img src="./../../../assets/images//copy.png" alt="" srcset="" />

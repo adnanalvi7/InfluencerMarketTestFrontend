@@ -17,6 +17,7 @@ export class PostsComponent implements OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();  // cancel all the requests after closing the component
   constructor(private service: InstagramService) {}
 
+  proxyUrl='https://influencer-app-backend-e2890b2a50d3.herokuapp.com/';
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
@@ -56,7 +57,7 @@ export class PostsComponent implements OnDestroy {
 
   //#region api calls
   // get user complete detail
-  getUserProfileInfo(userId) {
+  private getUserProfileInfo(userId) {
     this.service
       .getUserInfo(userId)
       .pipe(debounceTime(300), takeUntil(this._unsubscribeAll))
@@ -72,7 +73,7 @@ export class PostsComponent implements OnDestroy {
   }
 
   // get contact links for user
-  getContacts(userId) {
+  private  getContacts(userId) {
     this.service
       .getUserContacts(userId)
       .pipe(debounceTime(300), takeUntil(this._unsubscribeAll))
@@ -87,7 +88,7 @@ export class PostsComponent implements OnDestroy {
   }
 
   // getting top 12 user's post 
-  getUserPosts(profile){
+  private getUserPosts(profile){
     this.isLoading = true;
     this.service
       .getUserPosts(profile.user_id)
