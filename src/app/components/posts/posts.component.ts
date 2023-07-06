@@ -24,9 +24,7 @@ export class PostsComponent implements OnDestroy {
   }
 
   // selected profile from search and getting the selected user details
-  selectedProfile(profile) {
-    console.log("profile");
-    
+  selectedProfile(profile) {    
     if(profile){
       this.getUserProfileInfo(profile?.user_id);
       this.getContacts(profile?.user_id);
@@ -46,9 +44,7 @@ export class PostsComponent implements OnDestroy {
   }
 
   // it opens the post image in new tab
-   openpost(post){
-    console.log("what is in the post : ",post);
-    
+   openpost(post){    
     if(post.media_type==2){
       window.open(post?.video_url, '_blank');
     }else window.open(post?.display_url, '_blank');
@@ -63,7 +59,6 @@ export class PostsComponent implements OnDestroy {
       .pipe(debounceTime(300), takeUntil(this._unsubscribeAll))
       .subscribe({
         next: (resp: any) => {
-          console.log('userInfl  : ', resp);
           this.profile = resp.user;
         },
         error: (err) => {
