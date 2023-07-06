@@ -46,6 +46,7 @@
   justify-content: flex-start;
   align-items: center;
   overflow: hidden;
+  z-index: 1;
   @media screen and (max-width: 768px) {
     width: 33%;
     height: 20%;
@@ -54,8 +55,13 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
-    margin-bottom: 10px; /* Add margin bottom for space */
+    // margin-bottom: 10px; /* Add margin bottom for space */
     aspect-ratio: 1/1;
+    z-index: -12;
+    &:hover{
+      filter: brightness(0.7);
+    }
+    
   }
 
   .comments {
@@ -65,7 +71,7 @@
     transform: translate(-50%, -50%);
     color: white;
     opacity: 0;
-    transition: opacity 0.9s ease;
+    transition: opacity 0.5s ease;
     font-size: 15px;
     width: 100%;
     text-align: center;
@@ -86,7 +92,9 @@
   }
 
   &:hover {
-    // background-color: rgba(0, 0, 0, 0.305);
+    img{
+      filter: brightness(0.6);
+    }
     .comments {
       opacity: 1;
     }
@@ -107,6 +115,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 30px;
+  z-index: 9999999;
 }
 
 .word_wrape {
