@@ -27,12 +27,13 @@ export class RequestInterceptor implements HttpInterceptor {
     return next.handle(newReq).pipe(
       catchError((error: HttpErrorResponse) => {
         // showing the error message in this.snackbar
-        this.snackbar.open(error?.error?.message || error?.error?.error, 'X', {
-          duration: 5000,
-          horizontalPosition:'end',
-          verticalPosition:'top'
-        });
-        console.log('API Error:', error?.error?.error);
+        if(error?.error?.message || error?.error?.error){
+          this.snackbar.open(error?.error?.message || error?.error?.error, 'X', {
+            duration: 5000,
+            horizontalPosition:'end',
+            verticalPosition:'top'
+          });
+        }
         return throwError(error);
       })
     ) as Observable<HttpEvent<any>>;
